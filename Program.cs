@@ -16,7 +16,18 @@ namespace BlackjackCS
                 Console.Write(card.ToString());
                 Console.WriteLine(" Value: {0}", card.GetValue());
             }
-            
+
+            deck.Shuffle();
+            int listIndex = 0;
+
+            foreach (Card card in deck.card)
+            {
+                Console.Write(listIndex++ + " ");
+                Console.Write("{0:000} ", card.GetId());
+                Console.Write(card.ToString());
+                Console.WriteLine(" Value: {0}", card.GetValue());
+            }
+
             Console.ReadLine();
         }
     }

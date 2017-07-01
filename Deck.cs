@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace BlackjackCS
@@ -69,6 +70,7 @@ namespace BlackjackCS
         }
     }
 
+
     class Deck
     {
         public List<Card> card;
@@ -88,6 +90,29 @@ namespace BlackjackCS
                     }
                 }
             }
+        }
+
+        /* Shuffle deck */
+        public void Shuffle(int numberOfShuffles = 3000)
+        {
+            Random rand = new Random();
+
+            for (int i = 0; i < numberOfShuffles; i++)
+            {
+                SwapCards(
+                    rand.Next(0, card.Count),
+                    rand.Next(0, card.Count));
+            }
+        }
+
+        private void SwapCards(int index1, int index2)
+        {
+            if (index1 == index2)
+                return;
+
+            Card temp = card[index1];
+            card[index1] = card[index2];
+            card[index2] = temp;
         }
     }
 }
