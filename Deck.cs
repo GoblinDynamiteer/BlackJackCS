@@ -2,25 +2,37 @@
 using System;
 using System.Collections.Generic;
 
-namespace BlackjackCS
+namespace PlayingCards
 {
     class Card
     {
         private int value;
         private int suit;
         private int cardId;
+        private bool played;
 
         public Card(int value, int suit, int id)
         {
             this.value = value;
             this.suit = suit;
             this.cardId = id;
+            this.played = false;
+        }
+
+        public void SetPlayed()
+        {
+            this.played = true;
+        }
+
+        public bool isPlayed()
+        {
+            return this.played;
         }
 
         static public readonly int maxValue = 13;
         static public readonly int maxSuit = 4;
 
-        public readonly string[] valueName = {
+        readonly string[] valueName = {
             "Ace",
             "Two",
             "Three",
@@ -36,15 +48,27 @@ namespace BlackjackCS
             "King"
         };
 
-        public readonly string[] suitName = {
+        readonly string[] suitName = {
             "Hearts",
             "Diamonds",
             "Clubs",
             "Spades"
         };
 
-        public override string ToString()
+        /* Eg. Nine of Hearts */
+        public string ToString(bool extendedInfo = false)
         {
+
+            if (extendedInfo)
+            {
+                return string.Format(
+                    "Id: {0:000} Played: {1} Name: {2} of {3}",
+                        this.cardId,
+                        this.played ? "Yes" : "No",
+                        valueName[this.value],
+                        suitName[this.suit]);
+            }
+
             return string.Format("{0} of {1}",
                 valueName[this.value],
                 suitName[this.suit]);
@@ -55,6 +79,7 @@ namespace BlackjackCS
             return cardId;
         }
 
+        /* Get blackjack value */
         public int GetValue(bool high = true)
         {
             int retval;
@@ -105,6 +130,7 @@ namespace BlackjackCS
             }
         }
 
+        /* Swap two cards in the deck, for shuffle */
         private void SwapCards(int index1, int index2)
         {
             if (index1 == index2)
@@ -113,6 +139,20 @@ namespace BlackjackCS
             Card temp = card[index1];
             card[index1] = card[index2];
             card[index2] = temp;
+        }
+
+        /* Deal and remove first card in stack */
+        public Card Deal()
+        {
+            if (card.Count >= 1)
+            {
+                card[0].SetPlayed();
+                Card retVal = card[0];
+                card.RemoveAt(0);
+                return retVal;
+            }
+
+            return null;
         }
     }
 }
