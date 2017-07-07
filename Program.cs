@@ -10,65 +10,55 @@ namespace BlackjackCS
     {
         static void Main(string[] args)
         {
-            /* Create and print 4 decks */
-            Deck deck = new Deck(1);
-
-            int listIndex = 0;
-
-            foreach (Card card in deck.card)
-            {
-                Console.Write(listIndex++ + " ");
-                Console.Write("{0:000} ", card.GetId());
-                Console.Write(card.ToString());
-                Console.WriteLine(" Value: {0}", card.GetValue());
-
-                if (listIndex == 10) break;
-            }
-
-            Console.WriteLine("");
+            Deck deck = new Deck(4);
             deck.Shuffle();
-            listIndex = 0;
 
-            foreach (Card card in deck.card)
-            {
-                Console.Write(listIndex++ + " ");
-                Console.Write("{0:000} ", card.GetId());
-                Console.Write(card.ToString());
-                Console.WriteLine(" Value: {0}", card.GetValue());
-
-                if (listIndex == 10) break;
-            }
-
-            Hand player = new Hand();
+            Hand player1 = new Hand();
+            Hand player2 = new Hand();
+            Hand player3 = new Hand();
+            Hand player4 = new Hand();
             Hand dealer = new Hand();
 
-            player.Add(deck.Deal());
-            player.Add(deck.Deal());
-
-            dealer.Add(deck.Deal());
-            dealer.Add(deck.Deal());
-
-            listIndex = 0;
-            Console.WriteLine("");
-
-            foreach (Card card in deck.card)
+            for (int i = 0; i < 2; i++)
             {
-                Console.Write(listIndex++ + " ");
-                Console.Write("{0:000} ", card.GetId());
-                Console.Write(card.ToString());
-                Console.WriteLine(" Value: {0}", card.GetValue());
-
-                if (listIndex == 10) break;
+                player1.Add(deck.Deal());
+                player2.Add(deck.Deal());
+                player3.Add(deck.Deal());
+                player4.Add(deck.Deal());
+                dealer.Add(deck.Deal());
             }
 
-            Console.WriteLine("");
+            int high, low;
 
-            Console.WriteLine("Player hand: \n{0}\n{1}",
-                player.ShowCard(0).ToString(true), player.ShowCard(1).ToString(true)
-                );
-            Console.WriteLine("Dealer hand: \n{0}\n{1}",
-                dealer.ShowCard(0).ToString(true), dealer.ShowCard(1).ToString(true)
-                );
+            Console.WriteLine("\nPlayer 1:");
+            Console.WriteLine(player1.ShowCard(0).ToString());
+            Console.WriteLine(player1.ShowCard(1).ToString());
+            player1.Value(out high, out low);
+            Console.WriteLine("Score: " + low + " / " + high);
+
+            Console.WriteLine("\nPlayer 2:");
+            Console.WriteLine(player2.ShowCard(0).ToString());
+            Console.WriteLine(player2.ShowCard(1).ToString());
+            player2.Value(out high, out low);
+            Console.WriteLine("Score: " + low + " / " + high);
+
+            Console.WriteLine("\nPlayer 3:");
+            Console.WriteLine(player3.ShowCard(0).ToString());
+            Console.WriteLine(player3.ShowCard(1).ToString());
+            player3.Value(out high, out low);
+            Console.WriteLine("Score: " + low + " / " + high);
+
+            Console.WriteLine("\nPlayer 4:");
+            Console.WriteLine(player4.ShowCard(0).ToString());
+            Console.WriteLine(player4.ShowCard(1).ToString());
+            player4.Value(out high, out low);
+            Console.WriteLine("Score: " + low + " / " + high);
+
+            Console.WriteLine("\nDealer:");
+            Console.WriteLine(dealer.ShowCard(0).ToString());
+            Console.WriteLine(dealer.ShowCard(1).ToString());
+            dealer.Value(out high, out low);
+            Console.WriteLine("Score: " + low + " / " + high);
 
             Console.ReadLine();
         }

@@ -11,6 +11,24 @@ namespace PlayingCards
         private int cardId;
         private bool played;
 
+        public enum Value
+        {
+            AceLow = 1,
+            Two = 2,
+            Three = 3,
+            Four = 4,
+            Five = 5,
+            Six = 6,
+            Seven = 7,
+            Eight = 8,
+            Nine = 9,
+            Ten = 10,
+            Jack = 10,
+            Queen = 10,
+            King = 10,
+            AceHigh = 11
+        }
+
         public Card(int value, int suit, int id)
         {
             this.value = value;
@@ -99,10 +117,14 @@ namespace PlayingCards
     class Deck
     {
         public List<Card> card;
+        int numberOfDecks;
+        bool anyCardDealt;
 
         public Deck(int numberOfDecks = 1)
         {
             card = new List<Card>();
+            this.numberOfDecks = numberOfDecks;
+            this.anyCardDealt = false;
             int cardId = 0;
 
             for (int i = 0; i < numberOfDecks; i++)
@@ -133,6 +155,7 @@ namespace PlayingCards
         /* Swap two cards in the deck, for shuffle */
         private void SwapCards(int index1, int index2)
         {
+            /* Skip if same card to swap */
             if (index1 == index2)
                 return;
 
@@ -146,13 +169,16 @@ namespace PlayingCards
         {
             if (card.Count >= 1)
             {
+                this.anyCardDealt = true;
                 card[0].SetPlayed();
                 Card retVal = card[0];
                 card.RemoveAt(0);
                 return retVal;
             }
 
+            /* If no cards left in deck */
             return null;
         }
+
     }
 }

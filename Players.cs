@@ -1,39 +1,85 @@
 ﻿using System.Collections.Generic;
 using PlayingCards;
+using System.Linq;
 
 namespace BlackJackPlayers
 {
     class Hand
     {
-        public List<Card> card;
+        List<Card> cards;
+        int valueHigh, valueLow;
 
+        /* Constructor */
         public Hand()
         {
-            card = new List<Card>();
+            cards = new List<Card>();
+            valueLow = 0;
+            valueHigh = 0;
         }
 
+        /* Add card to player hand
+         * use with Deck.Deal() */
         public void Add(Card newCard)
         {
-            card.Add(newCard);
+            cards.Add(newCard);
+            this.SetValues();
         }
 
-        public int Value(bool high = false)
+        /* Return number of cards in hand */
+        public int Count()
         {
-            int value = 0;
+            return this.cards.Count;
+        }
 
-            /* Fix, can mix high/low value for 
-             * several aces in hand */
-            foreach (Card card in this.card)
+        /* Set hand value(s) */
+        private void SetValues()
+        {
+            valueHigh = valueLow = 0;
+
+            /* Probably unneeded to check for aces.... */
+            if (this.HasAces())
             {
-                value += high ? card.GetValue(true) : card.GetValue(false);
+                foreach (Card card in this.cards)
+                {
+                    valueLow += card.GetValue(false);
+                    valueHigh += valueHigh + card.GetValue() < 21 ? 
+                        card.GetValue() : card.GetValue(false);
+                }
             }
 
-            return value;
+            else
+            {
+                valueHigh = valueLow = this.cards.Sum(
+                    p => p.GetValue());
+            }
         }
 
+        public bool Value(out int high, out int low)
+        {
+            high = valueHigh;
+            low = valueLow;
+
+            return (this.cards.Count == 2 && valueHigh == 21);
+        }
+
+        /* Determine if the hand contains ace(s) */
+        private bool HasAces()
+        {
+            return (this.cards.Exists(
+                c => c.GetValue(true) == 
+                    (int)Card.Value.AceHigh));
+        }
+
+        /* Return card at hand index */
         public Card ShowCard(int index)
         {
-            return card[index];
+            /* Check if correct... */
+            if (index >= cards.Count)
+            {
+                return null;
+            }
+
+            return cards[index];
         }
     }
 }
