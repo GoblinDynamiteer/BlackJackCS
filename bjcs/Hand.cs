@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using PlayingCards;
 using System;
 
-namespace BlackJackPlayers
+namespace bjcs
 {
     class Hand
     {
         List<Card> cards;
         List<Card> history;
-        int valueHigh, valueLow;
+        int scoreHigh, scoreLow;
         bool naturalBlackjack;
 
         /* Constructor */
@@ -16,8 +15,8 @@ namespace BlackJackPlayers
         {
             cards = new List<Card>();
             history = new List<Card>();
-            valueLow = 0;
-            valueHigh = 0;
+            scoreLow = 0;
+            scoreHigh = 0;
             naturalBlackjack = false;
         }
 
@@ -38,31 +37,31 @@ namespace BlackJackPlayers
         /* Set hand value(s) */
         private void SetValues()
         {
-            valueHigh = valueLow = 0;
+            scoreHigh = scoreLow = 0;
+
             foreach (Card card in this.cards)
             {
-                valueLow += card.GetValue(false);
-                valueHigh += valueHigh + card.GetValue() < 21 ? 
-                    card.GetValue() : card.GetValue(false);
+                scoreHigh += card.GetValueHigh();
+                scoreLow += card.GetValueLow();
             }
 
             this.naturalBlackjack = 
-                (this.cards.Count == 2 && valueHigh == 21);
+                (this.cards.Count == 2 && scoreHigh == 21);
         }
 
         /* Returns low/high */
-        public int ValueHigh()
+        public int ScoreHigh()
         {
-            return valueHigh;
+            return scoreHigh;
         }
 
         /* Returns low/high */
-        public int ValueLow()
+        public int ScoreLow()
         {
-            return valueLow;
+            return scoreLow;
         }
 
-        public bool NaturalBlackjack()
+        public bool hasNatural()
         {
             return naturalBlackjack;
         }
@@ -71,7 +70,7 @@ namespace BlackJackPlayers
         private bool HasAces()
         {
             return (this.cards.Exists(
-                c => c.GetValue(true) == 
+                c => c.GetValueHigh() == 
                     (int)Card.Value.AceHigh));
         }
 
